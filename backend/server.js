@@ -12,8 +12,10 @@ app.use(cors());
 app.use(express.json());
 
 const chatRouter = require('./routes/chat');
-
 app.use('/chat', chatRouter);
+
+const deckbuilderRouter = require('./routes/deckbuilder');
+app.use('/deckbuilder', deckbuilderRouter);
 
 app.listen(port, () => {
   console.log(`server is running on port ${port}`);
