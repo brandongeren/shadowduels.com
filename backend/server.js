@@ -33,6 +33,8 @@ io.on('connection', socket => {
 
     socket.join(user.room);
 
+    io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
+
     callback();
   });
 
@@ -41,12 +43,23 @@ io.on('connection', socket => {
     const user = getUser(socket.id);
 
     io.to(user.room).emit('message', { user: user.name, text: message });
-
+    io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room });
     callback();
   });
 
+  // i think it's important to have reconnect logic in here somewhere
+  // so that if somebody disconnects from a duel they have like, idk, 60 seconds to reconnect or something
   socket.on('disconnect', () => {
-    console.log('User has left')
+    console.log('User has left');
+
+    const user = removeUser(socket.id);
+
+    // sending a message that an user has disconnected is useful for something like a duel or a pm
+    // however this is not useful for a chat room
+    // should probably add logic to use both behaviors
+    if (user) {
+      io.to(user.room).emit('message', { user: 'admin', text: `${user.name} has left`});
+    }
   });
 });
 
