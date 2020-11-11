@@ -37,7 +37,7 @@ const getUser = (id) => {
 
 // return a list of all users in a particular room
 const getUsersInRoom = (room) => {
-  return users.filter((room) => user.room === room);
+  return users.filter((user) => user.room === room);
 }
 
 module.exports = { addUser, removeUser, getUser, getUsersInRoom};

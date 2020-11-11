@@ -43,7 +43,7 @@ io.on('connection', socket => {
     const user = getUser(socket.id);
 
     io.to(user.room).emit('message', { user: user.name, text: message });
-    io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room });
+    io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room )});
     callback();
   });
 
@@ -73,6 +73,9 @@ app.use('/chat', chatRouter);
 
 const deckbuilderRouter = require('./routes/deckbuilder');
 app.use('/deckbuilder', deckbuilderRouter);
+
+//Includes frontend
+app.use('/', express.static('../frontend/build'));
 
 server.listen(port, () => {
   console.log(`server is running on port ${port}`);

@@ -44,7 +44,7 @@ const Chat = () => {
       socket.off();
     }
   }, [ENDPOINT, window.location.search]); // this array specifies when useEffect will be called (if one of these variables updates)
-  
+
   useEffect(() => {
     socket.on('message', (message) => {
       setMessages([...messages, message]);
