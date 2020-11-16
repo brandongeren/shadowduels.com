@@ -6,7 +6,7 @@
   "scripts": {
     "test": "test",
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js -w . -w ../frontend/"
   },
   "author": "Brandon Geren",
   "license": "MIT",

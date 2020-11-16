@@ -12,7 +12,14 @@ let socket;
 
 const ENDPOINT = 'localhost:5000';
 
-const Chat = () => {
+export default function Chatroom() {
+  const { name, room } = queryString.parse(window.location.search);
+  return (
+    <Chat name={name} room={room}></Chat>
+  );
+}
+
+function Chat(props) {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
   const [users, setUsers] = useState('');
@@ -21,15 +28,14 @@ const Chat = () => {
 
   useEffect(() => {
     // location.search gives us the part of the url from the ? onwards
-    // queryString.parse turns that into an object 
-    const {name, room} = queryString.parse(window.location.search);
+    // queryString.parse turns that into an object
 
     socket = io(ENDPOINT);
 
-    setName(name);
-    setRoom(room);
+    setName(props.name);
+    setRoom(props.room);
 
-    socket.emit('join', {name, room}, (error) => {
+    socket.emit('join', { name, room }, (error) => {
       // obviously we want better error handling than this
       if (error) {
         alert(error);
@@ -42,7 +48,7 @@ const Chat = () => {
       socket.emit('disconnect');
 
       socket.off();
-    }
+    };
   }, [ENDPOINT, window.location.search]); // this array specifies when useEffect will be called (if one of these variables updates)
 
   useEffect(() => {
@@ -51,7 +57,7 @@ const Chat = () => {
     });
   }, [messages]);
 
-  const sendMessage = (event) => {
+  function sendMessage(event) {
     // stop the page from refreshing when we press the button or press enter
     event.preventDefault();
 
@@ -67,11 +73,9 @@ const Chat = () => {
     <div className="outerContainer">
       <div className="container">
         <InfoBar room={room} />
-        <Messages messages={messages} name={name}/>
-        <Input message={message} setMessage={setMessage} sendMessage={sendMessage}/>
+        <Messages messages={messages} name={name} />
+        <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>
     </div>
-  )
+  );
 }
-
-export default Chat;
